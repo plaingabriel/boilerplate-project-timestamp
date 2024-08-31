@@ -23,12 +23,20 @@ app.get("/api/:date?", function (req, res) {
   let unix;
   let utc;
 
+  if (!date) {
+    date = Date.now();
+  }
+
   if (new Date(date).getTime() > 0) {
     unix = Math.floor(new Date(date).getTime());
     utc = new Date(date).toUTCString();
   } else {
     unix = date;
     utc = new Date(parseInt(date)).toUTCString();
+  }
+
+  if (unix === "Invalid Date" || utc === "Invalid Date") {
+    return res.json({ error: "Invalid Date" });
   }
 
   return res.json({ unix, utc });
